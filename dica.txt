@@ -59,3 +59,12 @@ api:
 //         return NextResponse.json({ message: `Error: ${error}` }, { status: 500 });
 //     }
 // }
+
+
+echo "# elias-gomes-v0.0.6" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/herbariorum/elias-gomes-v0.0.6.git
+git push -u origin main
