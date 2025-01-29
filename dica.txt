@@ -1,0 +1,61 @@
+https://github.com/prisma/prisma-examples/tree/latest/orm/nextjs/app/posts/new
+
+https://www.youtube.com/watch?v=6HJqvjlp-A4&list=PLFEYDzaV84MjrpZ6myxkoQUNxtrYeL8ju&index=15
+
+
+
+npx prisma migrate dev --create-only
+npx prisma migrate dev
+
+atualiza:
+npx prisma db push
+
+
+Postgresql
+update public."Post" set images=ARRAY [
+                    'https://i.ibb.co/ZGRrft3/sementes-rudgea-longiflora.jpg',
+                    'https://i.ibb.co/X2dKKPY/ramos-rudgea-longiflora.jpg',
+                    'https://i.ibb.co/4mV8JPr/frutos-rudgea-longiflora.jpg',
+                    'https://i.ibb.co/4p7Q8Xg/caule-rudgea-longiflora.jpg',
+                    'https://i.ibb.co/tsp2cp4/estipulas-rudgea-longiflora.jpg'
+                ] WHERE id = 3;
+
+
+
+api:
+// export async function GET(request: Request) {
+//     try {
+//         const rows = await new Promise((resolve, reject) => {
+//             db.all('SELECT id, titulo, slug, conteudo, created_at, imagem_detalhe FROM post;', [], 
+//                 (error: Error | null, rows: Array<{ id: number, titulo: string, slug: string, conteudo: string, created_at: Date, imagem_detalhe: string }>) => {
+//                 if (error) {
+//                     reject(error);
+//                 } else {
+//                     resolve(rows);
+//                 }
+//             });
+//         });
+//         return NextResponse.json(rows, { status: 200 });
+//     } catch (error) {
+//         return NextResponse.json({ message: `Error: ${error}` }, { status: 500 });
+//     }
+// }
+
+// export async function POST(request: Request) {
+
+//     const { id, titulo, slug, conteudo, author_id } = await request.json();
+//     try {
+//         await new Promise((resolve, reject) => {
+//             db.run('INSERT INTO post(id, titulo, slug, conteudo, author_id, created_at) VALUES (?, ?, ?, ?, ?, ?)', [id, titulo, slug, conteudo, author_id, new Date().toISOString()], function (this: any, error: Error | null) {
+//                 if (error) {
+//                     reject(error);
+//                 } else {
+//                     resolve(this.lastID);
+//                 }
+//             });
+//         });
+//         return NextResponse.json({ slug: slug }, { status: 201 });
+//     } catch (error) {
+//         return NextResponse.json({ message: `Error: ${error}` }, { status: 500 });
+//     }
+// }
