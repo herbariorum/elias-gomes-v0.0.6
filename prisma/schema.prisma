@@ -20,6 +20,7 @@ model User {
   name    String?
   posts   Post[]
   profile Profile?
+  reactions Reactions[]
 }
 
 model Post {
@@ -42,6 +43,8 @@ model Reactions{
   reaction_type String 
   postId    Int
   post      Post @relation(fields: [postId], references: [id])
+  userId    Int
+  user      User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }
 

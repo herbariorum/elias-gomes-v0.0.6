@@ -10,9 +10,15 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 import Image from 'next/image';
+import { LargeNumberLike } from 'node:crypto';
+
+interface SwiperComponentProps {
+  images: string[];
+}
 
 
-const SwiperComponent = ({ images }: { images: string[] }) => {
+const SwiperComponent = ({ images }: SwiperComponentProps) => {
+   
     return (
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -30,8 +36,8 @@ const SwiperComponent = ({ images }: { images: string[] }) => {
       
         } as React.CSSProperties}
       >
-        {images.map((image: string) => (
-          <SwiperSlide key={image.split('/').pop()?.split('.').shift()}>
+        {images.map((image: string, index: number) => (
+          <SwiperSlide key={index}>
             <Image
               src={image}
               alt=""

@@ -1,75 +1,47 @@
 'use client';
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa6";
 import { useState, useEffect } from "react";
+import usePostReactions from "@/hooks/usePostReactions";
+
+
+interface PostDescriptionProps {
+  description: string;
+  slug: string;
+  userId: number;
+}
+
 
 export function PostDescription({
   description,
-  postId,
-}: {
-  description: string;
-  postId: number; // O ID do post relacionado
-}) {
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
+  slug,
+  userId,
+}: PostDescriptionProps) {
 
-  // Utilizando o postId como dependência
-  useEffect(() => {
-    async function fetchReactions() {
-      try {
-        const response = await fetch(`/api/reactions?postId=${postId}`);
-        if (response.ok) {
-          const { likes, dislikes } = await response.json();
-          setLikes(likes);
-          setDislikes(dislikes);
-        } else {
-          console.error("Erro ao carregar as reações.");
-        }
-      } catch (error) {
-        console.error("Erro ao buscar reações:", error);
-      }
-    }
-
-    if (postId) {
-      fetchReactions();
-    }
-  }, [postId]); // Depende apenas de postId
-
-  async function handleClickLike() {
-    try {
-      const response = await fetch(`/api/reactions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postId, reactionType: "like" }),
-      });
-
-      if (response.ok) {
-        setLikes(likes + 1);
-      } else {
-        console.error("Erro ao registrar like.");
-      }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-    }
+  const {handleReaction, reactions, loading, error } = usePostReactions({ slug });
+ 
+  if (loading) {
+    return <p>Loading...</p>
   }
 
-  async function handleClickDislike() {
-    try {
-      const response = await fetch(`/api/reactions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postId, reactionType: "dislike" }),
-      });
-
-      if (response.ok) {
-        setDislikes(dislikes + 1);
-      } else {
-        console.error("Erro ao registrar dislike.");
-      }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-    }
+  if (error) {
+    return <p style={{ color: 'red'}}>{error}</p>
   }
 
+  const likes = reactions ? reactions.likes : 0;
+  const dislikes = reactions ? reactions.dislikes : 0;
+  
+
+  const handleLike = async () => {
+    await handleReaction('like');
+    
+  };
+
+  const handleDislike = async () => {
+    await handleReaction('dislike');
+    
+  };
+
+  
   return (
     <div className="flex justify-center items-center bg-white">
       <div className="relative max-w-[1160px] w-full px-5 py-5">
@@ -80,7 +52,7 @@ export function PostDescription({
               {/* Like Section */}
               <div className="flex items-center gap-2">
                 <FaRegThumbsUp
-                  onClick={handleClickLike}
+                  onClick={handleLike}
                   className="cursor-pointer hover:text-green-600 transition"
                 />
                 <span>{likes}</span>
@@ -89,14 +61,15 @@ export function PostDescription({
               {/* Dislike Section */}
               <div className="flex items-center gap-2">
                 <FaRegThumbsDown
-                  onClick={handleClickDislike}
+                  onClick={handleDislike}
                   className="cursor-pointer hover:text-red-600 transition"
                 />
                 <span>{dislikes}</span>
               </div>
+              { error && <p style={{color: 'red'}}>{error}</p>}
             </div>
           </div>
-
+          
           <div className="hidden md:block min-h-[600px] bg-gray-100 p-5 ml-10 mt-10">
             <h2 className="text-x1 font-semibold mb-4">Neste artigo</h2>
             <ul className="space-y-2">

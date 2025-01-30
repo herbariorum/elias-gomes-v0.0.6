@@ -8,6 +8,7 @@ export default function Header({ header_title, header_description, onSearch }: {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const query = formData.get("search") as string;
+ 
     onSearch(query);
 
   };
